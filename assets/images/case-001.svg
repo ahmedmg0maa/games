@@ -1,0 +1,15 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='900' height='520' viewBox='0 0 900 520'>
+<defs><linearGradient id='g' x1='0' x2='1'><stop stop-color='#070b14'/><stop offset='.55' stop-color='#111b32'/><stop offset='1' stop-color='#2b2134'/></linearGradient><filter id='blur'><feGaussianBlur stdDeviation='18'/></filter></defs>
+<rect width='900' height='520' fill='url(#g)'/>
+<circle cx='160' cy='110' r='100' fill='#6ee7ff' opacity='.14' filter='url(#blur)'/><circle cx='760' cy='90' r='150' fill='#d6b66a' opacity='.13' filter='url(#blur)'/>
+<rect x='70' y='70' width='760' height='380' rx='32' fill='rgba(255,255,255,.06)' stroke='rgba(255,255,255,.18)'/>
+<rect x='112' y='118' width='280' height='310' rx='18' fill='rgba(0,0,0,.25)' stroke='rgba(255,255,255,.14)'/>
+<path d='M145 380 L230 270 L285 330 L330 250 L370 380Z' fill='#d6b66a' opacity='.55'/>
+<circle cx='270' cy='188' r='38' fill='#6ee7ff' opacity='.38'/>
+<rect x='430' y='126' width='330' height='24' rx='12' fill='#eef4ff' opacity='.82'/>
+<rect x='430' y='176' width='270' height='16' rx='8' fill='#9dadc8' opacity='.62'/>
+<rect x='430' y='210' width='300' height='16' rx='8' fill='#9dadc8' opacity='.42'/>
+<rect x='430' y='274' width='230' height='54' rx='14' fill='rgba(214,182,106,.18)' stroke='rgba(214,182,106,.4)'/>
+<rect x='430' y='350' width='300' height='18' rx='9' fill='#ff6678' opacity='.35'/>
+<text x='720' y='420' fill='#d6b66a' opacity='.65' font-size='46' font-family='Arial' font-weight='700'>CASE 001</text>
+</svg>
