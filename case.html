@@ -1,9 +1,13 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ملف القضية</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/style.css"></head><body><main class="container case-layout"><aside class="glass side"><a href="#brief">الموجز</a><a href="#suspects">المشتبه بهم</a><a href="#docs">المستندات</a><a href="#timeline">الخط الزمني</a><a href="#notes">دفتر الملاحظات</a><a id="hintLink" href="hints.html">التلميحات</a><a id="reportLink" href="final-report.html">التقرير النهائي</a></aside><section class="content" id="caseContent"></section></main><script src="js/cases-data.js"></script><script src="js/app.js"></script><script>
-const c=getCase(); document.title=c.title; hintLink.href='hints.html?id='+c.id; reportLink.href='final-report.html?id='+c.id;
-const notes=store.get('notes',{});
-caseContent.innerHTML=`<section id="brief" class="glass card"><div class="pillrow"><span class="badge ${c.levelClass}">${c.level}</span><span class="badge">${c.location}</span><span class="badge">${c.duration}</span></div><h1>${c.title}</h1><p class="lead">${c.premise}</p><div class="doc"><b>الضحية:</b> ${c.victim.name} — ${c.victim.age} سنة — ${c.victim.job}<br><span class="muted">${c.victim.note}</span></div></section>
-<section id="suspects" class="glass card"><h2>المشتبه بهم</h2><div class="suspects">${c.suspects.map(s=>`<div class="suspect"><h3>${s.name}</h3><div class="muted">${s.role}</div><p><b>الدافع:</b> ${s.motive}</p><p><b>السر:</b> ${s.secret}</p><p><b>الحجة:</b> ${s.alibi}</p></div>`).join('')}</div></section>
-<section id="docs" class="glass card"><h2>المستندات والأدلة</h2><p class="muted">بعض التفاصيل تبدو عادية لكنها قد تكون المفتاح. أضف ما تراه مهمًا إلى لوحة الأدلة.</p><div class="doc-grid">${c.documents.map(d=>`<article class="doc"><div class="type">${typeLabel(d.type)}</div><h3>${d.title}</h3><p class="muted">${d.body}</p><button class="btn" onclick="addEvidence('${c.id}-${d.id}','${d.title.replaceAll("'","")}')">إضافة للوحة الأدلة</button></article>`).join('')}</div></section>
-<section id="timeline" class="glass card"><h2>الخط الزمني</h2><div class="timeline">${c.timeline.map(t=>`<div class="titem">${t}</div>`).join('')}</div></section>
-<section id="notes" class="glass card"><h2>دفتر الملاحظات</h2><p class="muted">اكتب فرضياتك، من تستبعده، وما الدليل الذي يغير رأيك.</p><textarea oninput="saveNote('${c.id}',this.value)">${notes[c.id]||''}</textarea></section>`;
-</script></body></html>
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ملف القضية</title><link rel="stylesheet" href="css/style.css"></head><body>
+<header class="topbar"><a class="brand" href="index.html"><span class="seal">FDF</span><span id="caseTopTitle">ملف قضية</span></a><nav><a href="cases.html">القضايا</a><a id="topHints" href="hints.html">التلميحات</a><a id="topReport" href="final-report.html">الاتهام</a></nav></header>
+<main class="case-layout">
+  <aside class="side glass"><img id="caseImage" class="case-photo" alt="صورة القضية"><h2 id="caseTitle"></h2><p id="caseMeta"></p><div class="quick-links"><a id="hintsLink" class="btn small">تلميحات القضية</a><a id="reportLink" class="btn primary small">اختيار المتهم</a><a href="cases.html" class="btn small">كل القضايا</a></div></aside>
+  <section class="case-content">
+    <article class="glass case-summary"><p class="kicker">الملخص الرسمي</p><h1 id="caseName"></h1><p id="caseStory"></p></article>
+    <div id="timeline" class="glass block"></div>
+    <div id="suspects" class="glass block"></div>
+    <div id="documents" class="documents"></div>
+  </section>
+</main>
+<div class="floating-nav"><a href="#timeline">الزمن</a><a href="#suspects">المشتبهون</a><a href="#documents">المستندات</a><a id="floatReport">الاتهام</a></div>
+<script src="js/cases-data.js"></script><script src="js/app.js"></script></body></html>

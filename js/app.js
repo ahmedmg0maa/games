@@ -1,13 +1,13 @@
-const $=(q)=>document.querySelector(q); const $$=(q)=>[...document.querySelectorAll(q)];
-const params=new URLSearchParams(location.search); const caseId=params.get('id')||'case-001';
-const getCase=(id=caseId)=>window.CASES.find(c=>c.id===id)||window.CASES[0];
-const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set(k,v){localStorage.setItem(k,JSON.stringify(v))}};
-function nav(){return `<div class="nav"><div class="container navin"><a class="brand" href="index.html" style="text-decoration:none;color:inherit"><div class="mark">F</div><span>Family Detective Files</span></a><div class="links"><a href="cases.html">القضايا</a><a href="evidence-board.html">لوحة الأدلة</a><a href="hints.html">التلميحات</a><a href="games.html">تحديات</a></div></div></div>`}
-function footer(){return `<div class="footer"><div class="container">نظام تحقيق تفاعلي عربي — كل القضايا قابلة للحل بالأدلة فقط، بدون حظ.</div></div>`}
-function boot(){document.body.insertAdjacentHTML('afterbegin',nav());document.body.insertAdjacentHTML('beforeend',footer());}
-function caseCards(){return CASES.map(c=>`<article class="card"><img src="${c.cover}" alt="${c.title}"><div class="pillrow" style="margin:14px 0"><span class="badge ${c.levelClass}">${c.level}</span><span class="badge">${c.duration}</span></div><h3>${c.title}</h3><p class="muted">${c.tagline}</p><a class="btn primary" href="case.html?id=${c.id}">فتح ملف القضية</a></article>`).join('')}
-function addEvidence(id,title){let arr=store.get('evidence',[]); if(!arr.some(x=>x.id===id)){arr.push({id,title,caseId});store.set('evidence',arr)} alert('تمت إضافة الدليل إلى لوحة الأدلة');}
-function removeEvidence(i){let arr=store.get('evidence',[]);arr.splice(i,1);store.set('evidence',arr);renderBoard?.();}
-function saveNote(id,val){let notes=store.get('notes',{});notes[id]=val;store.set('notes',notes)}
-function typeLabel(t){return {police:'شرطة',forensic:'طب شرعي',camera:'كاميرا',calls:'اتصالات',email:'بريد',messages:'رسائل',witness:'شهادة',evidence:'دليل مادي',timeline:'تفصيلة زمنية'}[t]||'مستند'}
-boot();
+const $ = s => document.querySelector(s);
+const params = new URLSearchParams(location.search);
+const currentId = params.get('case') || 'case-101';
+const currentCase = CASES.find(c => c.id === currentId) || CASES[0];
+function q(url){ return `${url}?case=${currentCase.id}`; }
+function renderCases(){ const grid=$('#casesGrid'); if(!grid) return; grid.innerHTML=CASES.map(c=>`<article class="case-card glass"><img src="${c.image}" alt="${c.title}"><div><span class="badge">${c.level}</span><h2>${c.title}</h2><p>${c.summary}</p><p class="muted">${c.place}</p><a class="btn primary" href="case.html?case=${c.id}">فتح الملف</a></div></article>`).join(''); }
+function renderCase(){ if(!$('#caseTitle')) return; $('#caseTopTitle').textContent=currentCase.title; $('#caseImage').src=currentCase.image; $('#caseTitle').textContent=currentCase.title; $('#caseMeta').textContent=`${currentCase.level} · ${currentCase.place}`; $('#caseName').textContent=currentCase.title; $('#caseStory').textContent=currentCase.story; ['hintsLink','topHints'].forEach(id=>{const e=$('#'+id); if(e) e.href=q('hints.html')}); ['reportLink','topReport','floatReport'].forEach(id=>{const e=$('#'+id); if(e) e.href=q('final-report.html')});
+ $('#timeline').innerHTML=`<h2 id="timeline">الجدول الزمني</h2><ol class="timeline">${currentCase.timeline.map(x=>`<li>${x}</li>`).join('')}</ol>`;
+ $('#suspects').innerHTML=`<h2 id="suspects">المشتبه بهم</h2><div class="suspects">${currentCase.suspects.map(s=>`<article><h3>${s.name}</h3><p><b>الدافع:</b> ${s.motive}</p><p><b>ملاحظة:</b> ${s.note}</p></article>`).join('')}</div>`;
+ $('#documents').innerHTML=`<h2 id="documents" class="section-title">المستندات والتفاصيل</h2>${currentCase.docs.map((d,i)=>`<article class="doc glass"><div class="doc-head"><span>${String(i+1).padStart(2,'0')}</span><b>${d.type}</b></div><h3>${d.title}</h3><p>${d.body}</p></article>`).join('')}`; }
+function renderHints(){ const panel=$('#hintsPanel'); if(!panel) return; panel.innerHTML=CASES.map(c=>`<section class="glass hint-case"><div class="hint-head"><h2>${c.title}</h2><a class="btn small" href="case.html?case=${c.id}">فتح القضية</a></div>${c.hints.map((h,i)=>`<details><summary>تلميح ${i+1}</summary><p>${h}</p></details>`).join('')}</section>`).join(''); }
+function renderReport(){ if(!$('#suspectSelect')) return; $('#reportTitle').textContent=`اختيار المتهم: ${currentCase.title}`; $('#backCase').href=q('case.html'); const sel=$('#suspectSelect'); sel.innerHTML='<option value="">اختر المتهم...</option>'+currentCase.suspects.map(s=>`<option>${s.name}</option>`).join(''); $('#checkBtn').onclick=()=>{ const box=$('#resultBox'); if(sel.value===currentCase.answer){ box.className='result-box success'; box.innerHTML=`<h2>إجابة صحيحة</h2><p>${currentCase.solution}</p><a class="btn" href="cases.html">اختيار قضية أخرى</a>`; localStorage.setItem('solved-'+currentCase.id,'true'); } else { box.className='result-box fail'; box.innerHTML='<h2>حاول مرة أخرى</h2><p>المتهم المختار لا يفسر كل الأدلة. راجع الجدول الزمني والمستندات، أو افتح تلميحًا واحدًا فقط.</p>'; } }; }
+renderCases(); renderCase(); renderHints(); renderReport();
